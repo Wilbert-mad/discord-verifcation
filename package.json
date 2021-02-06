@@ -1,0 +1,33 @@
+{
+  "name": "discord-verifcation",
+  "version": "1.0.0",
+  "description": "Discord verification by chat, With multi guilds configuration, using sqlite as database.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kei-projects/discord-verifcation.git"
+  },
+  "keywords": [
+    "sqlite",
+    "discord-bot",
+    "bot",
+    "discord"
+  ],
+  "author": "Wilbert-mad",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kei-projects/discord-verifcation/issues"
+  },
+  "homepage": "https://github.com/kei-projects/discord-verifcation#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "sqlite": "^4.0.19",
+    "sqlite3": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.25"
+  }
+}
