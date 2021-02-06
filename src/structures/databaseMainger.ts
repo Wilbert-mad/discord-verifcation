@@ -43,7 +43,7 @@ export default class datbaseMainger {
     this.ready = true;
   }
 
-  async get(ID: string): Promise<guildConfigs | undefined> {
+  async get(ID?: string): Promise<guildConfigs | undefined> {
     return new Promise((resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
       this.db?.get<guildConfigs>('SELECT * FROM guildConfigs WHERE ID = ?', ID)

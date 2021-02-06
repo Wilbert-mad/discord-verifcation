@@ -7,6 +7,7 @@ export default class verifyClient extends Client {
   databaseManiger = new DatabaseManiger(this);
   private register = new Register(this);
   public commands = new Collection<string, BaseCommand>();
+  public aliases = new Collection<string, string>();
   public constructor(options: ClientOptions = {}) {
     super(options);
   }
