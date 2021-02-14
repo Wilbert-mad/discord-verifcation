@@ -19,20 +19,23 @@ export default class MessageEvent extends BaseEvent {
     const data: dataCache = {};
     const guildData = await client.databaseManiger.get(message.guild?.id);
     if (!guildData && message.guild) await client.databaseManiger.new(message.guild.id);
-    
+
     data.guildData = guildData;
     data.prefix = guildData?.Prefix;
 
-    const messagaArray = message.content.split(new RegExp(/s+/g));
+    const messagaArray = message.content.split(/ +/g);
     const command = messagaArray[0].toLowerCase();
     const args = messagaArray.slice(1);
 
     if (!data.prefix) return;
     if (!command.startsWith(data.prefix)) return;
 
-    const cmd = client.commands.get(command.slice(data.prefix.length)) || client.commands.get(client.aliases.get(command.slice(data.prefix.length)) || '');
+    const cmd =
+      client.commands.get(command.slice(data.prefix.length)) ||
+      client.commands.get(client.aliases.get(command.slice(data.prefix.length)) || '');
+
     if (!cmd) return;
-    
+
     if (cmd) {
       try {
         await cmd.run(client, message, args, data);

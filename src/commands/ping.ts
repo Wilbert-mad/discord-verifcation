@@ -9,10 +9,9 @@ export default class Ping extends BaseCommand {
 
   async run(_client: verifyClient, message: Message) {
     const statTime = Date.now();
-    await message.channel.send('pinging...')
-      .then((msg) => {
-        const endTime = Date.now();
-        msg.edit(`Pong. \`${endTime - statTime}ms\``);
-      });
+    await message.channel.send('pinging...').then(msg => {
+      const endTime = Date.now();
+      msg.edit(`Pong. \`${endTime - statTime}ms\``);
+    });
   }
 }

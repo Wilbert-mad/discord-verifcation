@@ -10,21 +10,26 @@ export class Register {
   }
 
   async commandsRegister(dir: string) {
-    const path = join(__dirname, dir)
+    const path = join(__dirname, dir);
     const paths = await fs.readdir(path);
     for (const file of paths) {
       if (file.endsWith('.js')) {
         const { default: Command } = await import(join(path, file));
-        const command = new Command();
+        const command: BaseCommand = new Command();
         if (Command.prototype instanceof BaseCommand) {
           this.client.commands.set(command.name, command);
+          if (command.options?.aliases) {
+            command.options?.aliases.forEach(a => {
+              this.client.aliases.set(a, command.name);
+            });
+          }
         }
       }
     }
   }
 
   async eventsRegister(dir: string) {
-    const path = join(__dirname, dir)
+    const path = join(__dirname, dir);
     const paths = await fs.readdir(path);
     for (const file of paths) {
       if (file.endsWith('.js')) {
