@@ -21,8 +21,8 @@ export default class verifyClient extends Client {
 
   verifyMessage(message: string, member: GuildMember | null, role?: string): string {
     message = message
-      .replace(/{user}/g, !member ? '`Member not found`' : member.nickname ?? member.user.username)
-      .replace(/{server}/g, !member ? '`member.guild.name`' : member.guild.name);
+      .replace(/{user}/g, !member ? '**`Member not found`**' : member.nickname ?? member.user.username)
+      .replace(/{server}/g, !member ? '**`Member not found`**' : member.guild.name);
     if (role && typeof role == 'string') message = message.replace(/{roles}/g, role.split(',').join(' '));
     if (role && typeof role == 'string') message = message.replace(/{role}/g, role.split(',')[0]);
 

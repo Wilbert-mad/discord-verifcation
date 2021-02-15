@@ -17,11 +17,13 @@ export default class MessageEvent extends BaseEvent {
     if (message.author.bot) return;
 
     const data: dataCache = {};
-    const guildData = await client.databaseManiger.get(message.guild?.id);
-    if (!guildData && message.guild) await client.databaseManiger.new(message.guild.id);
+    if (message.guild) {
+      const guildData = await client.databaseManiger.get(message.guild?.id);
+      if (!guildData && message.guild) await client.databaseManiger.new(message.guild.id);
 
-    data.guildData = guildData;
-    data.prefix = guildData?.Prefix;
+      data.guildData = guildData;
+      data.prefix = guildData?.Prefix;
+    }
 
     const messagaArray = message.content.split(/ +/g);
     const command = messagaArray[0].toLowerCase();

@@ -10,6 +10,9 @@ export default class Ready extends BaseEvent {
     console.log(`${client.user?.username} is ready`);
     client.user?.setPresence({ activity: { name: ';help' } });
 
-    console.log('GuildConfigs retreved: ', await client.databaseManiger.db?.all('SELECT * FROM guildConfigs'));
+    console.log(
+      'GuildConfigs retreved loaded servers: ',
+      (await client.databaseManiger.db?.all('SELECT ID FROM guildConfigs'))?.length
+    );
   }
 }

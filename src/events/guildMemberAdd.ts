@@ -18,7 +18,7 @@ export default class guildMemberAdd extends BaseEvent {
       (welcomeChannel as TextChannel).send(welcomeEmbed);
     }
     if (data.AllowDM == 0 && data.DmMessage) {
-      member.send(client.verifyMessage(data.DmMessage, member));
+      member.send(client.verifyMessage(data.DmMessage, member)).catch(_e => {});
     }
   }
 }

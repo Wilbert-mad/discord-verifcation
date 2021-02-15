@@ -3,7 +3,8 @@ import type { dataCache } from '../events/message';
 import type verifyClient from './VerifyClient';
 
 export interface commandOptions {
-  aliases: string[];
+  aliases?: string[];
+  sunCommands?: boolean;
 }
 
 export default class BaseCommand {

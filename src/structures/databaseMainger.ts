@@ -33,11 +33,17 @@ export interface guildConfigs {
    * Bots server prefix
    */
   Prefix?: string;
+  /**
+   * The language set to for the server
+   * NOTE: not used but set for later on
+   */
+  Language?: 'en-us';
 }
 
 export default class datbaseMainger {
   private _db: DATABASE | null = null;
   public ready = false;
+  private _cache = new Map<string, guildConfigs | undefined>();
   constructor(public client: verifyClient) {
     this.client = client;
   }
@@ -48,7 +54,7 @@ export default class datbaseMainger {
    */
   public async startMain(): Promise<void> {
     const db = (this._db = await sqlite.open({
-      filename: './database/db.sqlite',
+      filename: join(process.cwd(), 'database', 'db.sqlite'),
       driver: sqlite3.Database,
       mode: sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
     }));
@@ -61,19 +67,24 @@ export default class datbaseMainger {
       AllowDM BOOL DEFAULT true,
       DmMessage TEXT NOT NULL DEFAULT "{user} welcome to {server} you have been given the {role}",
       Message TEXT NOT NULL DEFAULT "welcome to {server}",
-      Prefix TEXT DEFAULT ';'
+      Prefix TEXT DEFAULT ';',
+      Language TEXT DEFAULT 'en-us'
     )`)
     ).run();
 
     this.ready = true;
   }
 
-  async get(ID?: string): Promise<guildConfigs | undefined> {
+  async get(ID: string, force: boolean = false): Promise<guildConfigs | undefined> {
     return new Promise((resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
+      if (!force && this._cache.has(ID)) return resolve(this._cache.get(ID));
       this.db
         ?.get<guildConfigs>('SELECT * FROM guildConfigs WHERE ID = ?', ID)
-        .then(d => resolve(d))
+        .then(d => {
+          d && this._cache.set(ID, d);
+          return resolve(d);
+        })
         .catch(reject);
     });
   }
@@ -81,6 +92,7 @@ export default class datbaseMainger {
   update(key: keyof guildConfigs, val: any, id: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
+      this._cache.delete(id);
       this.db
         ?.exec(`UPDATE guildConfigs SET ${key} = ${val} WHERE ID = ${id}`)
         .then(() => resolve())
@@ -101,6 +113,7 @@ export default class datbaseMainger {
   async delete(ID: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
+      this._cache.delete(ID);
       this.db
         ?.exec(`DELETE FROM guildConfigs WHERE ID = ${ID}`)
         .then(() => resolve())

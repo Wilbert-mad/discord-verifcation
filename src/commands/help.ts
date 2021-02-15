@@ -14,8 +14,10 @@ export default class Help extends BaseCommand {
       const cmd = client.commands.get(command) || client.commands.get(client.aliases.get(command) || '');
       return message.channel.send(
         `**${cmd?.name}** ${
-          cmd?.options?.aliases.length ? `\nAliases: ${cmd.options.aliases.map(a => Indent(a)).join(' ')}` : ''
-        }`
+          cmd?.options?.aliases && cmd?.options?.aliases.length
+            ? `\nAliases: ${cmd.options.aliases.map(a => Indent(a)).join(' ')}`
+            : ''
+        }${cmd?.options?.sunCommands ? '\n Type: SubCommands' : ''}`
       );
     } else {
       message.channel.send(`Avalable commands \`${client.commands.map(cmd => cmd.name).join(', ')}\``);
