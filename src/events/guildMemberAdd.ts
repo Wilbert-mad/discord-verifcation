@@ -17,7 +17,7 @@ export default class guildMemberAdd extends BaseEvent {
         .setDescription(client.verifyMessage(data.Message ?? 'DESCRIPTION NOT FOUND', member));
       (welcomeChannel as TextChannel).send(welcomeEmbed);
     }
-    if (data.AllowDM == 0 && data.DmMessage) {
+    if (data.AllowDM == 1 && data.DmMessage) {
       member.send(client.verifyMessage(data.DmMessage, member)).catch(_e => {});
     }
   }

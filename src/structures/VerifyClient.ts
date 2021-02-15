@@ -1,4 +1,5 @@
 import { Client, ClientOptions, Collection, GuildMember } from 'discord.js';
+import Host from '../Utils/Host';
 import { Register } from '../Utils/Register';
 import type BaseCommand from './BaseCommand';
 import DatabaseManiger from './databaseMainger';
@@ -8,12 +9,14 @@ export default class verifyClient extends Client {
   private register = new Register(this);
   public commands = new Collection<string, BaseCommand>();
   public aliases = new Collection<string, string>();
+  public hostApi?: Host;
   public constructor(options: ClientOptions = {}) {
     super(options);
   }
 
-  async start(token: string) {
+  async start(token: string, key: string) {
     await this.databaseManiger.startMain();
+    this.hostApi = new Host(key, this.user?.id);
     await this.register.eventsRegister('../events');
     await this.register.commandsRegister('../commands');
     await super.login(token);
