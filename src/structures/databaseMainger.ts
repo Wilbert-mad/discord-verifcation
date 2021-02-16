@@ -3,6 +3,24 @@ import * as sqlite from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { join } from 'path';
 
+export enum VarifactionModes {
+  /**
+   * Used on the server set channel the member must
+   * varify by typing `varify` command and solving the equation
+   */
+  CHAT_EQUATION = 'chatEquation',
+  /**
+   * Right no join will dm a member and ask you to
+   * varify by typing `varify` command and solving the equation
+   * if not solved in time default to chat equation
+   */
+  DM_EQUATION = 'DmEquation',
+  /**
+   * default varifactionMode, just gives a memeber a role on join if any
+   */
+  NONE = 'noneOff',
+}
+
 export type DATABASE = sqlite.Database<sqlite3.Database, sqlite3.Statement>;
 export interface guildConfigs {
   /**
@@ -12,32 +30,45 @@ export interface guildConfigs {
   /**
    * Welcome message channel
    */
-  ChannelId?: string;
+  ChannelId: string | null;
+  /**
+   * The channel for verifying users
+   */
+  ChannelVerifyingID: string | null;
+  /**
+   * Whether to delete a message from verification channel after use
+   * or if its not a valid varifaction message
+   */
+  DeleteAV: number;
+  /**
+   * Set mode to varify a joined member
+   */
+  VarifactionMode: VarifactionModes;
   /**
    * roles added to members when thay join, split by ','
    */
-  Roles?: string;
+  Roles: string | null;
   /**
    * Whether to dm the member on join
    */
-  AllowDM: boolean | number;
+  AllowDM: number;
   /**
    * The dmed message
    */
-  DmMessage?: string;
+  DmMessage: string | null;
   /**
    * main message send to the welcome channel
    */
-  Message?: string;
+  Message: string | null;
   /**
    * Bots server prefix
    */
-  Prefix?: string;
+  Prefix: string | null;
   /**
    * The language set to for the server
    * NOTE: not used but set for later on
    */
-  Language?: 'en-us';
+  Language: 'en-us' | null;
 }
 
 export default class datbaseMainger {
@@ -59,18 +90,20 @@ export default class datbaseMainger {
       mode: sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
     }));
 
-    (
-      await db.prepare(`CREATE TABLE IF NOT EXISTS guildConfigs (
+    const sql = await db.prepare(`CREATE TABLE IF NOT EXISTS guildConfigs (
       ID TEXT NOT NULL PRIMARY KEY,
       ChannelId TEXT,
+      ChannelVerifyingID TEXT,
+      DeleteAV bool DEFAULT true,
+      VarifactionMode TEXT DEFAULT "noneOff",
       Roles TEXT,
       AllowDM BOOL DEFAULT true,
       DmMessage TEXT NOT NULL DEFAULT "{user} welcome to {server} you have been given the {role}",
       Message TEXT NOT NULL DEFAULT "welcome to {server}",
       Prefix TEXT DEFAULT ';',
       Language TEXT DEFAULT 'en-us'
-    )`)
-    ).run();
+    )`);
+    sql.run();
 
     this.ready = true;
   }

@@ -23,12 +23,6 @@ npm install typescript
 echo "::[notice] # Run the build"
 npm run build
 
-if [ -d "./src" ]; then
-  # Take action if $DIR exists. #
-  echo "::[notice] Deleting src dir"
-  rm -r src
-fi
-
 echo "::[notice] # Commit and push"
 git pull
 cd out

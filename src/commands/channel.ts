@@ -15,8 +15,7 @@ export default class SetChannel extends BaseCommand {
     if (!channel) return message.channel.send('❌ | No channel found!');
     await client.databaseManiger
       .update('ChannelId', channel.id, message.guild.id)
-      .catch(e => message.channel.send(`Error updating channel: ${e.message || e}`))
-      .then(() => message.channel.send(`Channel set to ${channel.toString()}`));
-    console.log(await client.databaseManiger.get(message.guild.id));
+      .then(() => message.channel.send(`Channel set to ${channel.toString()}`))
+      .catch(e => message.channel.send(`Error updating channel: ${e.message || e}`));
   }
 }

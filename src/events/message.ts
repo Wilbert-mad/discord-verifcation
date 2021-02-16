@@ -5,7 +5,9 @@ import type verifyClient from '../structures/VerifyClient';
 
 export interface dataCache {
   guildData?: guildConfigs;
-  prefix?: string;
+  prefix?: string | null;
+  active?: boolean;
+  cmd?: string;
 }
 
 export default class MessageEvent extends BaseEvent {
@@ -37,6 +39,7 @@ export default class MessageEvent extends BaseEvent {
       client.commands.get(client.aliases.get(command.slice(data.prefix.length)) || '');
 
     if (!cmd) return;
+    data.cmd = cmd.name;
 
     if (cmd) {
       try {

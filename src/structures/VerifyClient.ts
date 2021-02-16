@@ -1,15 +1,17 @@
 import { Client, ClientOptions, Collection, GuildMember } from 'discord.js';
 import Host from '../Utils/Host';
 import { Register } from '../Utils/Register';
+import { ValidationModeManger } from '../Utils/VarifactionModes';
 import type BaseCommand from './BaseCommand';
 import DatabaseManiger from './databaseMainger';
 
 export default class verifyClient extends Client {
-  databaseManiger = new DatabaseManiger(this);
+  public databaseManiger = new DatabaseManiger(this);
   private register = new Register(this);
   public commands = new Collection<string, BaseCommand>();
   public aliases = new Collection<string, string>();
   public hostApi?: Host;
+  public validators = new ValidationModeManger();
   public constructor(options: ClientOptions = {}) {
     super(options);
   }
