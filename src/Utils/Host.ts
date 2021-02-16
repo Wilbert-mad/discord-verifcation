@@ -4,7 +4,8 @@ import fetch from 'node-fetch';
 
 interface events {
   error: [error: any];
-  fetched: [data: Response]
+  fetched: [data: Response];
+  post: [];
 }
 
 interface PostData {
@@ -31,9 +32,9 @@ export default class Host extends EventEmitter {
     });
   }
 
-  async clientInfo() {
+  async clientInfo(): Promise<PostData | null> {
     if (!this.id) return null;
-    return await this._APIrequest(`/bot/${this.id}/info`, 'GET');
+    return await this._APIrequest(`/bot/${this.id}/info`, 'GET').then(d => d.json());
   }
 
   public async post(data: { servers: string; users: string; clientInfo: ClientUser }): Promise<void> {
