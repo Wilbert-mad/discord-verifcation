@@ -4,14 +4,16 @@ import { Register } from '../Utils/Register';
 import { ValidationModeManger } from '../Utils/VarifactionModes';
 import type BaseCommand from './BaseCommand';
 import DatabaseManiger from './databaseMainger';
+import { LaguageMainger } from './languageMainger';
 
 export default class verifyClient extends Client {
   public databaseManiger = new DatabaseManiger(this);
   private register = new Register(this);
   public commands = new Collection<string, BaseCommand>();
   public aliases = new Collection<string, string>();
-  public hostApi?: Host;
+  public languages = new LaguageMainger();
   public validators = new ValidationModeManger();
+  public hostApi?: Host;
   public constructor(options: ClientOptions = {}) {
     super(options);
   }

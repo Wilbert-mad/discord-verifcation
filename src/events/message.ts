@@ -1,7 +1,7 @@
-import type { Message } from 'discord.js';
 import BaseEvent from '../structures/BaseEvent';
 import type { guildConfigs } from '../structures/databaseMainger';
 import type verifyClient from '../structures/VerifyClient';
+import type { varifyMessage } from '../structures/discord/Message';
 
 export interface dataCache {
   guildData?: guildConfigs;
@@ -15,7 +15,7 @@ export default class MessageEvent extends BaseEvent {
     super('message');
   }
 
-  async run(client: verifyClient, message: Message) {
+  async run(client: verifyClient, message: varifyMessage) {
     if (message.author.bot) return;
 
     const data: dataCache = {};
