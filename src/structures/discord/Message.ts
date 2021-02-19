@@ -1,10 +1,10 @@
 import { Message, Structures } from 'discord.js';
 import type verifyClient from '../VerifyClient';
-import type { varifyGuild } from './Guild';
+import type { verifyGuild } from './Guild';
 
-export class varifyMessage extends Message {
+export class verifyMessage extends Message {
   async send(key: string) {
-    const data = await (this.guild as varifyGuild).data();
+    const data = await (this.guild as verifyGuild).data();
     const languages = (this.client as verifyClient).languages.get(data?.Language ?? 'en-us');
     const message = languages?.get(key);
     if (typeof message == 'string') return this.channel.send(message);
@@ -14,5 +14,5 @@ export class varifyMessage extends Message {
 }
 
 export default Structures.extend('Message', () => {
-  return varifyMessage;
+  return verifyMessage;
 });

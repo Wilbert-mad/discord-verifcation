@@ -1,7 +1,7 @@
 import { Guild, Structures } from 'discord.js';
 import verifyClient from '../VerifyClient';
 
-export class varifyGuild extends Guild {
+export class verifyGuild extends Guild {
   async data() {
     return (this.client as verifyClient).databaseManiger.get(this.id);
   }
@@ -12,5 +12,5 @@ export class varifyGuild extends Guild {
 }
 
 export default Structures.extend('Guild', () => {
-  return varifyGuild;
+  return verifyGuild;
 });

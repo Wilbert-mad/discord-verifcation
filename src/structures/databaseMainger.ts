@@ -96,7 +96,7 @@ export default class datbaseMainger {
       ChannelVerifyingID TEXT,
       DeleteAV bool DEFAULT true,
       VarifactionMode TEXT DEFAULT "noneOff",
-      Roles TEXT,
+      Roles TEXT DEFAULT "",
       AllowDM BOOL DEFAULT true,
       DmMessage TEXT NOT NULL DEFAULT "{user} welcome to {server} you have been given the {role}",
       Message TEXT NOT NULL DEFAULT "welcome to {server}",
@@ -122,7 +122,64 @@ export default class datbaseMainger {
     });
   }
 
-  update(key: keyof guildConfigs, val: any, id: string): Promise<void> {
+  async push<T extends string>(key: keyof guildConfigs, added: T[], id: string): Promise<null | Set<T>> {
+    return new Promise(async (resolve, reject) => {
+      if (!this.db) reject(new Error('DB not open yet.'));
+      let data1 = this._cache.get(id) || (await this.get(id));
+      if (!data1) return resolve(null);
+      let data: string | number | null | T[] = data1[key];
+      // if data id not found set it to emty string
+      if (data == undefined || data == null) await this.update(key, '""', id).catch(reject);
+
+      // data checks
+      // if (typeof data === 'string' && data.length < 0) reject(new Error('DATA must be string and parseibl.'));
+      if (typeof data !== 'string')
+        return reject(new Error(`DATA must be string and parseibl. Invalid: ${typeof data}`));
+      data = this.parse(data);
+
+      // reslove if data includes on of the roles
+      // for (const d of added) {
+      //   if (data && data.toString().split(',').includes(d)) return resolve(new Set(data as T[]));
+      // }
+
+      // check the length of data and added of one is `0` then return `null`
+      if (added.length < 0 || (data && (data as T[]).length < 0)) return resolve(null);
+      // add `added` to a set to filter repets
+      const set = new Set<T>(data as T[]);
+      for (const i of added) {
+        if (!set.has(i)) set.add(i);
+      }
+
+      // update data
+      await this.update(key, `"${this.toArray(set)}"`, id).catch(reject);
+      resolve(set);
+    });
+  }
+
+  parse<R>(value: string, seperator: string = ','): R[] {
+    if (typeof value !== 'string') return [];
+    const t = value.replace(/\s/g, '').split(seperator);
+    const e = [];
+    if (t[0].charAt(0) === '{') {
+      for (const el of t) {
+        try {
+          e.push(JSON.parse(el));
+        } catch (error) {}
+      }
+    }
+    return e.length > 0 ? e : t.filter(e => e.length > 0 && e);
+  }
+
+  /**
+   * turn the set to array
+   */
+  toArray<T>(s: Set<T>): Array<T> {
+    const arr: T[] = [];
+    s.forEach(e => arr.push(e));
+    return arr;
+  }
+
+  async update<V>(key: keyof guildConfigs, val: V, id: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
       this._cache.delete(id);

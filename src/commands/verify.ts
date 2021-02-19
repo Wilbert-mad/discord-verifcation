@@ -10,7 +10,6 @@ export default class Verify extends BaseCommand {
   }
 
   async run(client: verifyClient, message: Message, _args: string[], data: dataCache) {
-    console.log(data);
     if (data.cmd === 'verify' && message.channel.id === data.guildData?.ChannelVerifyingID) data.active = true;
     switch (data.guildData?.VarifactionMode) {
       case VarifactionModes.CHAT_EQUATION:
