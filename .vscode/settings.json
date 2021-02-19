@@ -1,0 +1,8 @@
+{
+  "prettier.bracketSpacing": true,
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.vueIndentScriptAndStyle": true,
+  "prettier.arrowParens": "avoid",
+  "prettier.printWidth": 120
+}
