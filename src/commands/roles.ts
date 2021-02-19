@@ -1,18 +1,30 @@
-import { Collection, Guild, Role } from 'discord.js';
+import { Collection, Guild, MessageEmbed, Role } from 'discord.js';
+import type { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
 import type { verifyMessage } from '../structures/discord/Message';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class Roles extends BaseCommand {
   constructor() {
-    super('roles');
+    super('roles', {
+      sunCommands: true,
+    });
   }
 
-  async run(client: verifyClient, message: verifyMessage, [cmd, ...args]: string[]) {
+  async run(client: verifyClient, message: verifyMessage, [cmd, ...args]: string[], data: dataCache) {
     if (!message.guild) return;
     const roles = message.mentions.roles.size > 0 ? message.mentions.roles : this.evalRolsArgs(message.guild, args);
     const ids = roles.map(r => r.id);
     if (ids.length <= 0) return message.channel.send('Roles are required argument!');
+    const helpEmbed = new MessageEmbed()
+      .setAuthor(message.author.username)
+      .setDescription(
+        `Avalable sub commands:\n \`add\` Adds a new role (roleID) to the server configs.
+      e.g: \`${data.prefix}roles add 270947823098 4983745928578\`,
+      \`view\` Shows all the set roles (roleIDs).
+      \`e.g: ${data.prefix}message view\``
+      )
+      .setTimestamp();
 
     switch (cmd) {
       case 'add': {
@@ -37,6 +49,7 @@ export default class Roles extends BaseCommand {
         break;
       }
       default: {
+        message.channel.send(helpEmbed);
         break;
       }
     }
