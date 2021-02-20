@@ -1,5 +1,6 @@
-import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
+import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import BaseEvent from '../structures/BaseEvent';
+import { verifyGuild } from '../structures/discord/Guild';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class guildMemberAdd extends BaseEvent {
@@ -8,17 +9,42 @@ export default class guildMemberAdd extends BaseEvent {
   }
 
   async run(client: verifyClient, member: GuildMember) {
-    const data = await client.databaseManiger.get(member.guild.id);
+    const data = await (member.guild as verifyGuild).data();
     if (!data) return;
     const welcomeChannel = member.guild.channels.cache.get(data.ChannelId || '');
-    if (welcomeChannel) {
+    if (welcomeChannel && data.Message) {
       const welcomeEmbed = new MessageEmbed()
+        .setColor('RANDOM')
         .setAuthor(member.user.username)
-        .setDescription(client.verifyMessage(data.Message ?? 'DESCRIPTION NOT FOUND', member));
-      (welcomeChannel as TextChannel).send(welcomeEmbed);
+        .setDescription(client.verifyMessage(data.Message, member, data.Roles))
+        .setTimestamp();
+      (welcomeChannel as TextChannel).send(welcomeEmbed).catch(_e => {});
+    }
+    if (data.Roles.length > 0) {
+      const rolesArray = client.databaseManiger.parse<string>(data.Roles);
+      const roles = this.evalRols(member.guild, rolesArray);
+      if (member.guild.me?.hasPermission('MANAGE_ROLES' || 'ADMINISTRATOR')) {
+        for (const role of roles) {
+          try {
+            member.roles.add(role);
+          } catch (error) {
+            console.error(error.message || error);
+          }
+        }
+      }
     }
     if (data.AllowDM == 1 && data.DmMessage) {
-      member.send(client.verifyMessage(data.DmMessage, member)).catch(_e => {});
+      member.send(client.verifyMessage(data.DmMessage, member, data.Roles)).catch(_e => {});
     }
+  }
+
+  evalRols({ roles }: Guild, args: string[]) {
+    const arg = new Set<string>(args);
+    const coll = new Collection<string, Role>();
+    for (const id of arg) {
+      const role = roles.cache.get(id);
+      if (role) coll.set(role.id, role);
+    }
+    return coll;
   }
 }

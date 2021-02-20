@@ -47,7 +47,7 @@ export interface guildConfigs {
   /**
    * roles added to members when thay join, split by ','
    */
-  Roles: string | null;
+  Roles: string;
   /**
    * Whether to dm the member on join
    */
