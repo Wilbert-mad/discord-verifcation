@@ -15,24 +15,43 @@ export default class Roles extends BaseCommand {
     if (!message.guild) return;
     const roles = message.mentions.roles.size > 0 ? message.mentions.roles : this.evalRolsArgs(message.guild, args);
     const ids = roles.map(r => r.id);
-    if (ids.length <= 0) return message.channel.send('Roles are required argument!');
     const helpEmbed = new MessageEmbed()
       .setAuthor(message.author.username)
       .setDescription(
         `Avalable sub commands:\n \`add\` Adds a new role (roleID) to the server configs.
-      e.g: \`${data.prefix}roles add 270947823098 4983745928578\`,
-      \`view\` Shows all the set roles (roleIDs).
-      \`e.g: ${data.prefix}message view\``
+        e.g: \`${data.prefix}roles add 270947823098 @role\`,
+        \`view\` Shows all the set roles (roleIDs).
+        \`e.g: ${data.prefix}roles view\`
+        \`remove\` Removes a role already set in the roles settings.
+        e.g: \`${data.prefix}roles remove (270947823598|@role)\``
       )
       .setTimestamp();
 
     switch (cmd) {
       case 'add': {
+        if (ids.length <= 0) return message.channel.send('Roles are required argument!');
         client.databaseManiger
           .push('Roles', ids, message.guild.id)
           .then(d => {
             if (d == null) return message.channel.send('There was an error updating you role');
             return message.channel.send(`Roles updated cache set; \`${client.databaseManiger.toArray(d).join(', ')}\``);
+          })
+          .catch(e => console.log(e));
+        break;
+      }
+
+      case 'remove': {
+        if (ids.length <= 0) return message.channel.send('Roles are required argument!');
+        const rolesParsed = client.databaseManiger.parse<string>(data.guildData!.Roles);
+        const set = new Set<string>();
+        for (const i of rolesParsed) if (!set.has(i)) set.add(i);
+        if (!ids[0]) return message.channel.send('This is a invalid role!');
+        set.delete(ids[0]);
+        const d = client.databaseManiger.toArray(set);
+        client.databaseManiger
+          .update<string>('Roles', `"${d}"`, message.guild.id)
+          .then(() => {
+            return message.channel.send(`Roles updated.`);
           })
           .catch(e => console.log(e));
         break;

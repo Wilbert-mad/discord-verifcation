@@ -1,6 +1,6 @@
 import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
 import BaseEvent from '../structures/BaseEvent';
-import { verifyGuild } from '../structures/discord/Guild';
+import type { verifyGuild } from '../structures/discord/Guild';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class guildMemberAdd extends BaseEvent {
@@ -21,28 +21,29 @@ export default class guildMemberAdd extends BaseEvent {
       (welcomeChannel as TextChannel).send(welcomeEmbed).catch(_e => {});
     }
     if (data.Roles.length > 0) {
-      const rolesArray = client.databaseManiger.parse<string>(data.Roles);
-      const roles = this.evalRols(member.guild, rolesArray);
-      if (member.guild.me?.hasPermission('MANAGE_ROLES' || 'ADMINISTRATOR')) {
-        for (const role of roles) {
-          try {
-            member.roles.add(role);
-          } catch (error) {
-            console.error(error.message || error);
-          }
-        }
-      }
+      // const rolesArray = client.databaseManiger.parse<string>(data.Roles);
+      // const roles = this.evalRols(member.guild, rolesArray);
+      // console.log(roles);
+      // if (member.guild.me?.hasPermission('MANAGE_ROLES' || 'ADMINISTRATOR')) {
+      //   for (const role of roles) {
+      //     try {
+      //       member.roles.add(role);
+      //     } catch (error) {
+      //       console.error(error.message || error);
+      //     }
+      //   }
+      // }
     }
     if (data.AllowDM == 1 && data.DmMessage) {
       member.send(client.verifyMessage(data.DmMessage, member, data.Roles)).catch(_e => {});
     }
   }
 
-  evalRols({ roles }: Guild, args: string[]) {
+  evalRols(guild: Guild, args: string[]) {
     const arg = new Set<string>(args);
     const coll = new Collection<string, Role>();
     for (const id of arg) {
-      const role = roles.cache.get(id);
+      const role = guild.roles.cache.get(id);
       if (role) coll.set(role.id, role);
     }
     return coll;

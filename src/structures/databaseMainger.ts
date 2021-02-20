@@ -97,7 +97,7 @@ export default class datbaseMainger {
       DeleteAV bool DEFAULT true,
       VarifactionMode TEXT DEFAULT "noneOff",
       Roles TEXT DEFAULT "",
-      AllowDM BOOL DEFAULT true,
+      AllowDM BOOL DEFAULT false,
       DmMessage TEXT NOT NULL DEFAULT "{{user}} welcome to {{server}} you have been given the {{role}}",
       Message TEXT NOT NULL DEFAULT "welcome to {{server}}",
       Prefix TEXT DEFAULT ';',
