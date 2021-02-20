@@ -98,8 +98,8 @@ export default class datbaseMainger {
       VarifactionMode TEXT DEFAULT "noneOff",
       Roles TEXT DEFAULT "",
       AllowDM BOOL DEFAULT true,
-      DmMessage TEXT NOT NULL DEFAULT "{user} welcome to {server} you have been given the {role}",
-      Message TEXT NOT NULL DEFAULT "welcome to {server}",
+      DmMessage TEXT NOT NULL DEFAULT "{{user}} welcome to {{server}} you have been given the {{role}}",
+      Message TEXT NOT NULL DEFAULT "welcome to {{server}}",
       Prefix TEXT DEFAULT ';',
       Language TEXT DEFAULT 'en-us'
     )`);

@@ -17,9 +17,9 @@ export default class MessageSub extends BaseCommand {
       .setAuthor(message.author.username)
       .setDescription(
         `Avalable sub commands:\n \`dm\` Dm is the message dmed to the joined member.
-        e.g: \`${data.prefix}message dm Hello {user} welcome to {server}\`,
+        e.g: \`${data.prefix}message dm Hello {{user}} welcome to {{server}}\`,
         \`main\` Main is the welcome channel of the server.
-        \`e.g: ${data.prefix}message main Hello {user} welcome!\`
+        \`e.g: ${data.prefix}message main Hello {{user}} welcome!\`
         \`syntax\` Shows the avalable syntax for messages.`
       )
       .setTimestamp();
@@ -52,22 +52,22 @@ export default class MessageSub extends BaseCommand {
         message.channel.send(
           new MessageEmbed().setColor('RANDOOM').addFields([
             {
-              name: '{user}',
+              name: '{{user}}',
               value: 'This is the emitted name of the member that joined the server.',
               inline: true,
             },
             {
-              name: '{server}',
+              name: '{{server}}',
               value: 'The name of the server the member joined.',
               inline: true,
             },
             {
-              name: '{role}',
+              name: '{{role}}',
               value: 'The first added role to the new member.',
               inline: true,
             },
             {
-              name: '{roles}',
+              name: '{{roles}}',
               value: 'All the roles given the the new member joined.',
               inline: true,
             },

@@ -5,6 +5,7 @@ import { ValidationModeManger } from '../Utils/VarifactionModes';
 import type BaseCommand from './BaseCommand';
 import DatabaseManiger from './databaseMainger';
 import { LaguageMainger } from './languageMainger';
+import mustach from 'mustache';
 
 export default class verifyClient extends Client {
   public databaseManiger = new DatabaseManiger(this);
@@ -27,12 +28,18 @@ export default class verifyClient extends Client {
   }
 
   verifyMessage(message: string, member: GuildMember | null, role?: string): string {
-    message = message
-      .replace(/{user}/g, !member ? '**`Member not found`**' : member.nickname ?? member.user.username)
-      .replace(/{server}/g, !member ? '**`Member not found`**' : member.guild.name);
-    if (role && typeof role == 'string') message = message.replace(/{roles}/g, role.split(',').join(' '));
-    if (role && typeof role == 'string') message = message.replace(/{role}/g, role.split(',')[0]);
-
+    try {
+      message = mustach
+        .render(message, {
+          user: !member ? '**`Member not found`**' : member.nickname ?? member.user.username,
+          server: !member ? '**`Member not found`**' : member.guild.name,
+          roles: role ? role.split(',').join(' ') : '**`Roles not set`**',
+          role: role ? role.split(',')[0] : '**`Roles not set`**',
+        })
+        .replace(/&#x60;/g, '`');
+    } catch (error) {
+      message = error.message || error;
+    }
     return message;
   }
 }
