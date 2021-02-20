@@ -14,7 +14,7 @@ else
 fi
 
 echo "::[notice] # Checkout the repo in the target branch so we can build and push to it"
-TARGET_BRANCH="build"
+TARGET_BRANCH="production"
 git clone $REPO out -b $TARGET_BRANCH
 
 echo "::[notice] # Install TypeScript"

@@ -4,7 +4,6 @@ on:
     branches:
       - 'production'
       - '!master'
-      - '!build'
 jobs:
   bot:
     name: BUILD
