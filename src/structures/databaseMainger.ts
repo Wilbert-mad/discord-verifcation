@@ -84,26 +84,13 @@ export default class datbaseMainger {
    * this will also set up the guildconfigs table
    */
   public async startMain(): Promise<void> {
-    const db = (this._db = await sqlite.open({
+    this._db = await sqlite.open({
       filename: join(process.cwd(), 'database', 'db.sqlite'),
       driver: sqlite3.Database,
       mode: sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-    }));
+    });
 
-    const sql = await db.prepare(`CREATE TABLE IF NOT EXISTS guildConfigs (
-      ID TEXT NOT NULL PRIMARY KEY,
-      ChannelId TEXT,
-      ChannelVerifyingID TEXT,
-      DeleteAV bool DEFAULT true,
-      VarifactionMode TEXT DEFAULT "noneOff",
-      Roles TEXT DEFAULT "",
-      AllowDM BOOL DEFAULT false,
-      DmMessage TEXT NOT NULL DEFAULT "{{user}} welcome to {{server}} you have been given the {{role}}",
-      Message TEXT NOT NULL DEFAULT "welcome to {{server}}",
-      Prefix TEXT DEFAULT ';',
-      Language TEXT DEFAULT 'en-us'
-    )`);
-    sql.run();
+    this.migrate();
 
     this.ready = true;
   }

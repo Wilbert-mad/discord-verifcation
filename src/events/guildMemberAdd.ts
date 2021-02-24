@@ -1,17 +1,7 @@
-import { Collection, Guild, GuildMember, MessageEmbed, Role, TextChannel } from 'discord.js';
+import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import BaseEvent from '../structures/BaseEvent';
 import type { verifyGuild } from '../structures/discord/Guild';
 import type verifyClient from '../structures/VerifyClient';
-
-function evalRols(guild: Guild, args: string[]) {
-  const arg = new Set<string>(args);
-  const coll = new Collection<string, Role>();
-  for (const id of arg) {
-    const role = guild.roles.cache.get(id);
-    if (role) coll.set(role.id, role);
-  }
-  return coll;
-}
 
 export default class guildMemberAdd extends BaseEvent {
   constructor() {
@@ -30,18 +20,10 @@ export default class guildMemberAdd extends BaseEvent {
         .setTimestamp();
       (welcomeChannel as TextChannel).send(welcomeEmbed).catch(_e => {});
     }
-    if (data.Roles.length > 0) {
+    if (data.Roles.length > 0 && data.VarifactionMode === 'noneOff') {
       const rolesArray = client.databaseManiger.parse<string>(data.Roles);
-      const roles = evalRols(member.guild, rolesArray);
-      if (member.guild.me?.hasPermission('MANAGE_ROLES' || 'ADMINISTRATOR')) {
-        for (const role of roles) {
-          try {
-            member.roles.add(role);
-          } catch (error) {
-            console.error(error.message || error);
-          }
-        }
-      }
+      if (!member.guild.me?.hasPermission('MANAGE_ROLES' || 'ADMINISTRATOR')) return;
+      for (const role of rolesArray) member.roles.add(role).catch(_e => {});
     }
     if (data.AllowDM == 1 && data.DmMessage) {
       member.send(client.verifyMessage(data.DmMessage, member, data.Roles)).catch(_e => {});

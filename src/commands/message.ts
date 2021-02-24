@@ -19,7 +19,7 @@ export default class MessageSub extends BaseCommand {
         `Avalable sub commands:\n \`dm\` Dm is the message dmed to the joined member.
         e.g: \`${data.prefix}message dm Hello {{user}} welcome to {{server}}\`,
         \`main\` Main is the welcome channel of the server.
-        \`e.g: ${data.prefix}message main Hello {{user}} welcome!\`
+        e.g: \`${data.prefix}message main Hello {{user}} welcome!\`
         \`syntax\` Shows the avalable syntax for messages.`
       )
       .setTimestamp();

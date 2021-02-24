@@ -1,14 +1,13 @@
 import type { Message } from 'discord.js';
 
 export class ValidationModeManger {
-  async equationMode(message: Message) {
+  async equationMode(message: Message): Promise<boolean> {
     const emg = [':zero:', ':one:', ':two:', ':three:', ':four:', ':five:', ':six:', ':seven:', ':eight:', ':nine:'];
     const ops = ['+', '-', '*', '/'];
-    const operation = ops[Math.floor(Math.random() * ops.length)];
     const dCache = {
       firstNumber: Math.floor(Math.random() * Object.keys(emg).length),
       secondNumber: Math.floor(Math.random() * Object.keys(emg).length),
-      operation,
+      operation: ops[Math.floor(Math.random() * ops.length)],
     };
     const anc = Math.round(eval(`${dCache.firstNumber} ${dCache.operation} ${dCache.secondNumber}`));
     const msg = await message.channel.send(
@@ -23,12 +22,13 @@ export class ValidationModeManger {
       .then(c => c.first())
       .catch(_e => message.channel.send('Time run out.'));
 
-    if (!col) return;
+    if (!col) return false;
     const res = parseInt(col.content);
 
-    if (isNaN(res)) return message.channel.send('Error: Not a number');
-    else if (typeof res === 'number' && anc === res) {
-      console.log('You go it right!');
+    if (isNaN(res)) return message.channel.send('Error: Not a number') && false;
+    else if (typeof res === 'number' && res === anc) {
+      return true;
     }
+    return true;
   }
 }
