@@ -84,13 +84,15 @@ export default class datbaseMainger {
    * this will also set up the guildconfigs table
    */
   public async startMain(): Promise<void> {
-    this._db = await sqlite.open({
+    const db = (this._db = await sqlite.open({
       filename: join(process.cwd(), 'database', 'db.sqlite'),
       driver: sqlite3.Database,
       mode: sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
-    });
+    }));
 
-    this.migrate();
+    await db.migrate({
+      migrationsPath: join(process.cwd(), 'database', 'migrations'),
+    });
 
     this.ready = true;
   }
@@ -195,14 +197,6 @@ export default class datbaseMainger {
         ?.exec(`DELETE FROM guildConfigs WHERE ID = ${ID}`)
         .then(() => resolve())
         .catch(reject);
-    });
-  }
-
-  async migrate(configs?: sqlite.IMigrate.MigrationParams) {
-    if (!this.db) return;
-    await this.db.migrate({
-      ...configs,
-      migrationsPath: join(process.cwd(), 'database', 'migrations'),
     });
   }
 
