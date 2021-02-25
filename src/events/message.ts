@@ -43,6 +43,7 @@ export default class MessageEvent extends BaseEvent {
 
     if (cmd) {
       try {
+        if (command === 'guildmemberadd' && message.member) return client.emit('guildMemberAdd', message.member);
         await cmd.run(client, message, args, data);
       } catch (error) {
         console.log(error);

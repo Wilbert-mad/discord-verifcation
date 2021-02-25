@@ -7,7 +7,6 @@ src/configs.ts
 
 # database
 database/db.sqlite
-database/migrations/*
 
 # build
 /dist
