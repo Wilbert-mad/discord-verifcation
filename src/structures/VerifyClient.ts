@@ -36,7 +36,14 @@ export default class verifyClient extends Client {
           roles: role ? role.split(',').join(' ') : '**`Roles not set`**',
           role: role ? role.split(',')[0] : '**`Roles not set`**',
         })
-        .replace(/&#x60;/g, '`');
+        .replace(/&#x60;/g, '`')
+        .replace(/&#x3D;/g, '=')
+        .replace(/&#x2F;/g, '/')
+        .replace(/&#39;/g, "'")
+        .replace(/&quot;/g, '"')
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+        .replace(/&amp;/g, '&');
     } catch (error) {
       message = error.message || error;
     }
