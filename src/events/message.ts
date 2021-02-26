@@ -32,6 +32,8 @@ export default class MessageEvent extends BaseEvent {
     const args = messagaArray.slice(1);
 
     if (!data.prefix) return;
+    if (new RegExp(`<@!${client.user!.id}>`).test(command))
+      return message.channel.send(`Prefix is set to: \`${data.prefix}\``);
     if (!command.startsWith(data.prefix)) return;
     if (command.slice(data.prefix.length) === 'guildmemberadd' && message.member)
       return client.emit('guildMemberAdd', message.member);
@@ -47,6 +49,7 @@ export default class MessageEvent extends BaseEvent {
       try {
         await cmd.run(client, message, args, data);
       } catch (error) {
+        message.channel.send(`An error has occored! \`${error.message || error}\``);
         console.log(error);
       }
     }
