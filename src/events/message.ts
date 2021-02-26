@@ -33,6 +33,8 @@ export default class MessageEvent extends BaseEvent {
 
     if (!data.prefix) return;
     if (!command.startsWith(data.prefix)) return;
+    if (command.slice(data.prefix.length) === 'guildmemberadd' && message.member)
+      return client.emit('guildMemberAdd', message.member);
 
     const cmd =
       client.commands.get(command.slice(data.prefix.length)) ||
@@ -43,7 +45,6 @@ export default class MessageEvent extends BaseEvent {
 
     if (cmd) {
       try {
-        if (command === 'guildmemberadd' && message.member) return client.emit('guildMemberAdd', message.member);
         await cmd.run(client, message, args, data);
       } catch (error) {
         console.log(error);

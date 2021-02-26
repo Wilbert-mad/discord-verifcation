@@ -16,8 +16,10 @@ export default class guildMemberAdd extends BaseEvent {
       const welcomeEmbed = new MessageEmbed()
         .setColor('RANDOM')
         .setAuthor(member.user.username)
+        .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
         .setDescription(client.verifyMessage(data.Message, member, data.Roles))
         .setTimestamp();
+      // NOTE: change this to a webhook in the future??
       (welcomeChannel as TextChannel).send(welcomeEmbed).catch(_e => {});
     }
     if (data.Roles.length > 0 && data.VarifactionMode === 'noneOff') {
