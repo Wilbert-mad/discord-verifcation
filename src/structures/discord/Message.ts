@@ -1,8 +1,11 @@
 import { Message, Structures } from 'discord.js';
+import { baselangs } from '../BaseLanguage';
 import type verifyClient from '../VerifyClient';
 import type { verifyGuild } from './Guild';
 
 export class verifyMessage extends Message {
+  async translate(key: keyof baselangs): Promise<Function | undefined>;
+  async translate(key: string): Promise<Function | undefined>;
   async translate(key: string) {
     const data = await (this.guild as verifyGuild).data();
     const languages = (this.client as verifyClient).languages.get(data?.Language ?? 'en-us');
@@ -10,16 +13,18 @@ export class verifyMessage extends Message {
     return message;
   }
 
-  async send(key: string) {
+  async send(key: keyof baselangs, ...args: any): Promise<Message>;
+  async send(key: string, ...args: any) {
     const message = await this.translate(key);
-    if (typeof message == 'string') return this.channel.send(message);
-    // if (typeof message == 'function') return this.channel.send(message());
-    else return this.channel.send('TRANSLATION_NOTFOUND');
+    if (!message) return this.channel.send('TRANSLATION_NOTFOUND');
+    this.channel.send(message(...args));
   }
 
   async error(error: any) {
     console.log(error);
-    return await this.channel.send(`**An error has occored!**\`\`\`diff\n- ${error.message || error}\n\`\`\``);
+    const message = await this.translate('error_occored');
+    if (!message) return this.reply('TRANSLATION_NOTFOUND');
+    return await this.channel.send(message(error));
   }
 }
 

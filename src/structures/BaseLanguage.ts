@@ -1,15 +1,15 @@
-type function_ = (...args: any) => string;
-export default class BaseLanguage extends Map<string, string | function_> {
-  constructor(
-    public ops: {
-      [key: string]: string | function_;
-    }
-  ) {
+export interface baselangs {
+  error_occored: (error: any) => string;
+  Prefix_fetched: (prefix: string) => string;
+}
+
+export default class BaseLanguage extends Map<string, Function> {
+  constructor(public ops: baselangs) {
     super();
-    this._LOG();
+    this._LOAD();
   }
 
-  private _LOG() {
+  private _LOAD() {
     Object.entries(this.ops).forEach(([key, val]) => this.set(key, val));
   }
 }
