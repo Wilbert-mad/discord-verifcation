@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS guildConfigs (
   VarifactionMode TEXT DEFAULT "noneOff",
   Roles TEXT DEFAULT "",
   AllowDM BOOLEAN DEFAULT false,
-  DmMessage TEXT NOT NULL DEFAULT "{{user}} welcome to {{server}} you have been given the {{role}}",
+  DmMessage TEXT NOT NULL DEFAULT "{{user}} welcome to {{server}}",
   Message TEXT NOT NULL DEFAULT "welcome to {{server}}",
   Prefix TEXT DEFAULT ';',
   Language TEXT DEFAULT 'en-us'
