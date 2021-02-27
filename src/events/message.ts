@@ -49,8 +49,7 @@ export default class MessageEvent extends BaseEvent {
       try {
         await cmd.run(client, message, args, data);
       } catch (error) {
-        message.channel.send(`An error has occored! \`${error.message || error}\``);
-        console.log(error);
+        message.error(error);
       }
     }
   }

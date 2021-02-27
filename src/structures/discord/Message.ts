@@ -16,6 +16,11 @@ export class verifyMessage extends Message {
     // if (typeof message == 'function') return this.channel.send(message());
     else return this.channel.send('TRANSLATION_NOTFOUND');
   }
+
+  async error(error: any) {
+    console.log(error);
+    return await this.channel.send(`**An error has occored!**\`\`\`diff\n- ${error.message || error}\n\`\`\``);
+  }
 }
 
 export default Structures.extend('Message', () => {
