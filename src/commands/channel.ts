@@ -2,14 +2,19 @@ import { Message, MessageEmbed } from 'discord.js';
 import type { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
 import { VarifactionModes } from '../structures/databaseMainger';
+import PermissionGard from '../structures/permissionGard';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class SetChannel extends BaseCommand {
   constructor() {
-    super('channel', {
-      aliases: ['ch'],
-      sunCommands: true,
-    });
+    super(
+      'channel',
+      {
+        aliases: ['ch'],
+        sunCommands: true,
+      },
+      new PermissionGard(['MANAGE_GUILD' || 'ADMINISTRATOR'], [], { checkOwner: true })
+    );
   }
 
   async run(client: verifyClient, message: Message, [cmd, ...args]: string[], data: dataCache) {

@@ -2,13 +2,18 @@ import { Collection, Guild, MessageEmbed, Role } from 'discord.js';
 import type { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
 import type { verifyMessage } from '../structures/discord/Message';
+import PermissionGard from '../structures/permissionGard';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class Roles extends BaseCommand {
   constructor() {
-    super('roles', {
-      sunCommands: true,
-    });
+    super(
+      'roles',
+      {
+        sunCommands: true,
+      },
+      new PermissionGard(['MANAGE_GUILD' || 'ADMINISTRATOR'], [], { checkOwner: true })
+    );
   }
 
   async run(client: verifyClient, message: verifyMessage, [cmd, ...args]: string[], data: dataCache) {

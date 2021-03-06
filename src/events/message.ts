@@ -34,8 +34,10 @@ export default class MessageEvent extends BaseEvent {
     if (!data.prefix) return;
     if (new RegExp(`<@!${client.user!.id}>`).test(command)) return message.send('Prefix_fetched', data.prefix);
     if (!command.startsWith(data.prefix)) return;
-    if (command.slice(data.prefix.length) === 'guildmemberadd' && message.member)
-      return client.emit('guildMemberAdd', message.member);
+    if (command.slice(data.prefix.length) === 'guildmemberadd' && message.member) {
+      const member = message.mentions.members?.first() || message.member;
+      return client.emit('guildMemberAdd', member);
+    }
 
     const cmd =
       client.commands.get(command.slice(data.prefix.length)) ||

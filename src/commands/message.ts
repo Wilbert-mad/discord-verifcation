@@ -1,14 +1,19 @@
 import { Message, MessageEmbed } from 'discord.js';
 import { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
+import PermissionGard from '../structures/permissionGard';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class MessageSub extends BaseCommand {
   constructor() {
-    super('message', {
-      aliases: ['msg', 'm'],
-      sunCommands: true,
-    });
+    super(
+      'message',
+      {
+        aliases: ['msg', 'm'],
+        sunCommands: true,
+      },
+      new PermissionGard(['MANAGE_GUILD' || 'ADMINISTRATOR'], [], { checkOwner: true })
+    );
   }
 
   async run(client: verifyClient, message: Message, [cmd, ...args]: string[], data: dataCache) {
