@@ -14,6 +14,7 @@ export class verifyMessage extends Message {
   }
 
   async send(key: keyof baselangs, ...args: any): Promise<Message>;
+  async send(key: string, ...args: any): Promise<Message>;
   async send(key: string, ...args: any) {
     const message = await this.translate(key);
     if (!message) return this.channel.send('TRANSLATION_NOTFOUND');
@@ -24,7 +25,7 @@ export class verifyMessage extends Message {
     console.log(error);
     const message = await this.translate('error_occored');
     if (!message) return this.reply('TRANSLATION_NOTFOUND');
-    return await this.channel.send(message(error));
+    return await this.channel.send(message(error.message || error));
   }
 }
 

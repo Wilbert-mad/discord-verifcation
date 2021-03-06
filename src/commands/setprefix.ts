@@ -1,11 +1,12 @@
 import type { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
 import type { verifyMessage } from '../structures/discord/Message';
+import PermissionGard from '../structures/permissionGard';
 import type verifyClient from '../structures/VerifyClient';
 
 export default class SetPrefix extends BaseCommand {
   constructor() {
-    super('setprefix');
+    super('setprefix', {}, new PermissionGard(['MANAGE_GUILD' || 'ADMINISTRATOR'], [], { checkOwner: true }));
   }
 
   async run(client: verifyClient, message: verifyMessage, [newPrefix]: string[], data: dataCache) {

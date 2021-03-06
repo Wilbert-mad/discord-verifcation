@@ -44,6 +44,12 @@ export default class MessageEvent extends BaseEvent {
     if (!cmd) return;
     data.cmd = cmd.name;
 
+    if (cmd.gard && message.member) {
+      const check = cmd.gard.check(message.member);
+      if (check.clientCheck) return message.send('Missing_perms', 'client', check.perms.client);
+      if (check.memberCheck) return message.send('Missing_perms', 'member', check.perms.member);
+    }
+
     if (cmd) {
       try {
         await cmd.run(client, message, args, data);
