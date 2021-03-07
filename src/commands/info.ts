@@ -43,6 +43,11 @@ export default class Info extends BaseCommand {
           value: 'Xa_puppet',
           inline: true,
         },
+        {
+          name: 'Trello',
+          value: '[Link Here](https://trello.com/b/lnKjiDZB/discord-verifaction)',
+          inline: true,
+        },
       ]);
 
     await message.channel.send(embed);
