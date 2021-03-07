@@ -20,6 +20,16 @@ git clone $REPO out -b $TARGET_BRANCH
 echo "::[notice] # Install TypeScript"
 npm install typescript
 
+echo "::[notice] # create file chack"
+if [ -e "./src/configs.ts"]; then
+  echo "file found"
+else
+  FILE="./src/configs.ts"
+  echo "export const TOKEN = '';" > $FILE
+  echo "export const KEY = '';" >> $FILE
+  cat $FILE
+fi
+
 echo "::[notice] # Run the build"
 npm run build
 
