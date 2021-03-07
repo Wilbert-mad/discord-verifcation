@@ -1,7 +1,8 @@
-import { Message, MessageEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import type { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
 import { VarifactionModes } from '../structures/databaseMainger';
+import type { verifyMessage } from '../structures/discord/Message';
 import PermissionGard from '../structures/permissionGard';
 import type verifyClient from '../structures/VerifyClient';
 
@@ -17,7 +18,7 @@ export default class SetChannel extends BaseCommand {
     );
   }
 
-  async run(client: verifyClient, message: Message, [cmd, ...args]: string[], data: dataCache) {
+  async run(client: verifyClient, message: verifyMessage, [cmd, ...args]: string[], data: dataCache) {
     if (!message.guild) return;
     const helpCommand = new MessageEmbed()
       .setAuthor('Channel sub Commands')
@@ -43,7 +44,7 @@ export default class SetChannel extends BaseCommand {
         await client.databaseManiger
           .update('ChannelId', channel.id, message.guild.id)
           .then(() => message.channel.send(`Channel set to ${channel.toString()}`))
-          .catch(e => message.channel.send(`Error updating channel: ${e.message || e}`));
+          .catch(e => message.error(`Updating channel: ${e.message || e}`));
         break;
       }
 
@@ -59,14 +60,14 @@ export default class SetChannel extends BaseCommand {
             .then(() => {
               message.channel.send('Setting turned off');
             })
-            .catch(e => message.channel.send(`Error updating setting: ${e.message || e}`) && console.log(e));
+            .catch(e => message.error(`Updating setting: ${e.message || e}`) && console.log(e));
         } else if (res === 'yes') {
           client.databaseManiger
             .update('AllowDM', 1, message.guild.id)
             .then(() => {
               message.channel.send('Setting turned on');
             })
-            .catch(e => message.channel.send(`Error updating setting: ${e.message || e}`) && console.log(e));
+            .catch(e => message.error(`Updating setting: ${e.message || e}`) && console.log(e));
         } else {
           return message.channel.send('This is not a valid type! "yes" or "no"');
         }
@@ -85,14 +86,14 @@ export default class SetChannel extends BaseCommand {
             .then(() => {
               message.channel.send('Setting turned off');
             })
-            .catch(e => message.channel.send(`Error updating setting: ${e.message || e}`) && console.log(e));
+            .catch(e => message.error(`Updating setting: ${e.message || e}`) && console.log(e));
         } else if (res === 'yes') {
           client.databaseManiger
             .update('DeleteAV', 1, message.guild.id)
             .then(() => {
               message.channel.send('Setting turned on');
             })
-            .catch(e => message.channel.send(`Error updating setting: ${e.message || e}`) && console.log(e));
+            .catch(e => message.error(`Updating setting: ${e.message || e}`) && console.log(e));
         } else {
           return message.channel.send('This is not a valid type! "yes" or "no"');
         }
@@ -104,7 +105,7 @@ export default class SetChannel extends BaseCommand {
         await client.databaseManiger
           .update('ChannelVerifyingID', channel.id, message.guild.id)
           .then(() => message.channel.send(`Verify channel set to ${channel.toString()}`))
-          .catch(e => message.channel.send(`Error updating verify channel: ${e.message || e}`));
+          .catch(e => message.error(`Updating verify channel: ${e.message || e}`));
         break;
       }
 
@@ -121,14 +122,14 @@ export default class SetChannel extends BaseCommand {
             .then(() => {
               message.channel.send('Setting set noneOff');
             })
-            .catch(e => message.channel.send(`Error updating settings: ${e.message || e}`) && console.log(e));
+            .catch(e => message.error(`Updating settings: ${e.message || e}`) && console.log(e));
         } else if (mode === 'chatEquation' && data.guildData?.VarifactionMode !== 'chatEquation') {
           client.databaseManiger
             .update('VarifactionMode', `"${VarifactionModes.CHAT_EQUATION}"`, message.guild.id)
             .then(() => {
               message.channel.send('Setting set chatEquation');
             })
-            .catch(e => message.channel.send(`Error updating settings: ${e.message || e}`) && console.log(e));
+            .catch(e => message.error(`Updating settings: ${e.message || e}`) && console.log(e));
         } else {
           return message.channel.send('This is not a valid type!');
         }
