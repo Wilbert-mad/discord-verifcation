@@ -6,6 +6,7 @@ cd $GITHUB_WORKSPACE
 REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 BRANCH_OR_TAG=`awk -F/ '{print $2}' <<< $GITHUB_REF`
 CURRENT_BRANCH=`awk -F/ '{print $NF}' <<< $GITHUB_REF`
+CONFIGS_FILE_SETINGS="export const TOKEN = '';export const KEY = '';"
 
 if [ "$BRANCH_OR_TAG" == "heads" ]; then
   SOURCE_TYPE="branch"
@@ -19,6 +20,13 @@ git clone $REPO out -b $TARGET_BRANCH
 
 echo "::[notice] # Install TypeScript"
 npm install typescript
+
+echo "::[notice] # create file chack"
+if [ -e "./src/configs.ts"]; then
+  echo "file found"
+else
+  cat $CONFIGS_FILE_SETINGS > "./src/configs.ts"
+fi
 
 echo "::[notice] # Run the build"
 npm run build
