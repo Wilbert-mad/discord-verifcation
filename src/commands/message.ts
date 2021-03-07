@@ -1,6 +1,7 @@
-import { Message, MessageEmbed } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { dataCache } from '../events/message';
 import BaseCommand from '../structures/BaseCommand';
+import type { verifyMessage } from '../structures/discord/Message';
 import PermissionGard from '../structures/permissionGard';
 import type verifyClient from '../structures/VerifyClient';
 
@@ -16,7 +17,7 @@ export default class MessageSub extends BaseCommand {
     );
   }
 
-  async run(client: verifyClient, message: Message, [cmd, ...args]: string[], data: dataCache) {
+  async run(client: verifyClient, message: verifyMessage, [cmd, ...args]: string[], data: dataCache) {
     if (!message.guild) return;
     const helpEmbed = new MessageEmbed()
       .setAuthor(message.author.username)
@@ -37,7 +38,7 @@ export default class MessageSub extends BaseCommand {
           .then(() =>
             message.channel.send(`DmMessage configs updated to: ${msg}. To preview up ${data.prefix}message test`)
           )
-          .catch(e => message.channel.send(`There was an error trying to update dm configs: ${e.message || e}`));
+          .catch(e => message.error(e));
         break;
       }
 
@@ -49,7 +50,7 @@ export default class MessageSub extends BaseCommand {
           .then(() =>
             message.channel.send(`Message configs updated to: ${msg}. To preview up ${data.prefix}message test`)
           )
-          .catch(e => message.channel.send(`There was an error trying to update dm configs: ${e.message || e}`));
+          .catch(e => message.error(e));
         break;
       }
 
