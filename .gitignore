@@ -4,9 +4,7 @@ package-lock.json
 
 # accounts privates
 src/configs.ts
+dist/configs.js
 
 # database
 database/db.sqlite
-
-# build
-/dist
