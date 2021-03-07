@@ -6,7 +6,6 @@ cd $GITHUB_WORKSPACE
 REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 BRANCH_OR_TAG=`awk -F/ '{print $2}' <<< $GITHUB_REF`
 CURRENT_BRANCH=`awk -F/ '{print $NF}' <<< $GITHUB_REF`
-CONFIGS_FILE_SETINGS="export const TOKEN = '';export const KEY = '';"
 
 if [ "$BRANCH_OR_TAG" == "heads" ]; then
   SOURCE_TYPE="branch"
@@ -25,7 +24,10 @@ echo "::[notice] # create file chack"
 if [ -e "./src/configs.ts"]; then
   echo "file found"
 else
-  cat $CONFIGS_FILE_SETINGS > "./src/configs.ts"
+  FILE="./src/configs.ts"
+  echo "export const TOKEN = '';" > $FILE
+  echo "export const KEY = '';" >> $FILE
+  cat $FILE
 fi
 
 echo "::[notice] # Run the build"
