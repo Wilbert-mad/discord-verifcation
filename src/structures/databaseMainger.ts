@@ -111,6 +111,10 @@ export default class datbaseMainger {
     });
   }
 
+  async has(id: string): Promise<boolean> {
+    return this._cache.has(id) === true ? this._cache.has(id) : !!(await this.get(id));
+  }
+
   async push<T extends string>(key: keyof guildConfigs, added: T[], id: string): Promise<null | Set<T>> {
     return new Promise(async (resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
@@ -180,8 +184,9 @@ export default class datbaseMainger {
   }
 
   async new(ID: string): Promise<void> {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       if (!this.db) reject(new Error('DB not open yet.'));
+      if (await this.has(ID)) return resolve();
       this.db
         ?.exec(`INSERT INTO guildConfigs(ID) VALUES (${ID})`)
         .then(() => resolve())

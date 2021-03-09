@@ -1,0 +1,16 @@
+{
+  "Create a event": {
+    "prefix": "eventbody",
+    "body": [
+      "import BaseEvent from '../structures/BaseEvent';",
+      "import type verifyClient from '../structures/VerifyClient';\n",
+      "export default class ${1:EventName} extends BaseEvent {",
+      "\tconstructor() {",
+      "\t\tsuper('${2:event}');",
+      "\t}\n",
+      "\trun(client: verifyClient$3) {$4}",
+      "}\n"
+    ],
+    "description": "Creates a base event"
+  }
+}

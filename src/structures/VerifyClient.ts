@@ -1,11 +1,12 @@
-import { Client, ClientOptions, Collection, GuildMember } from 'discord.js';
+import { Client, ClientOptions, Collection, GuildMember, WebhookClient } from 'discord.js';
+import mustach from 'mustache';
+import { LOGS } from '../configs';
 import Host from '../Utils/Host';
 import { Register } from '../Utils/Register';
 import { ValidationModeManger } from '../Utils/VarifactionModes';
 import type BaseCommand from './BaseCommand';
 import DatabaseManiger from './databaseMainger';
 import { LaguageMainger } from './languageMainger';
-import mustach from 'mustache';
 
 export default class verifyClient extends Client {
   public databaseManiger = new DatabaseManiger(this);
@@ -15,6 +16,7 @@ export default class verifyClient extends Client {
   public languages = new LaguageMainger();
   public validators = new ValidationModeManger();
   public hostApi?: Host;
+  public Logs = new WebhookClient(LOGS.ID, LOGS.TOKEN);
   public constructor(options: ClientOptions = {}) {
     super(options);
   }

@@ -1,7 +1,8 @@
 import type verifyClient from './VerifyClient';
+import { ClientEvents } from 'discord.js';
 
 export default class BaseEvent {
-  constructor(public name: string) {}
+  constructor(public name: keyof ClientEvents) {}
 
   // @ts-ignore
   public run(client: verifyClient, ...args: any): any {
