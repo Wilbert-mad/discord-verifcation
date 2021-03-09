@@ -1,6 +1,6 @@
-import { Client, ClientOptions, Collection, GuildMember, WebhookClient } from 'discord.js';
+import { Client, ClientOptions, Collection, GuildMember, User, WebhookClient } from 'discord.js';
 import mustach from 'mustache';
-import { LOGS } from '../configs';
+import { LOGS, OWNERS } from '../configs';
 import Host from '../Utils/Host';
 import { Register } from '../Utils/Register';
 import { ValidationModeManger } from '../Utils/VarifactionModes';
@@ -27,6 +27,12 @@ export default class verifyClient extends Client {
     await this.register.eventsRegister('../events');
     await this.register.commandsRegister('../commands');
     await super.login(token);
+  }
+
+  isOwner(user: User | null): boolean {
+    user = this.users.resolve(user ?? '');
+    if (!user) return false;
+    return OWNERS.includes(user.id);
   }
 
   verifyMessage(message: string, member: GuildMember | null, role?: string): string {
