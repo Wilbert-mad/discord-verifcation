@@ -48,6 +48,11 @@ export default class Info extends BaseCommand {
           value: '[Link Here](https://trello.com/b/lnKjiDZB/discord-verifaction)',
           inline: true,
         },
+        {
+          name: 'Version',
+          value: '1.1.0-beta',
+          inline: true,
+        },
       ]);
 
     await message.channel.send(embed);

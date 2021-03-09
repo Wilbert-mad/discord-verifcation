@@ -9,7 +9,7 @@ export default class GuildCreate extends BaseEvent {
   }
 
   async run(client: verifyClient, guild: verifyGuild) {
-    const has_database = await client.databaseManiger.has(guild.id);
+    const hasDatabase = await client.databaseManiger.has(guild.id);
     const embed = new MessageEmbed()
       .setAuthor(`[Join] ${guild.name}`)
       .setThumbnail(guild.iconURL() ?? '')
@@ -26,7 +26,7 @@ export default class GuildCreate extends BaseEvent {
         },
         {
           name: 'In database?',
-          value: has_database ? 'YES' : 'Not found',
+          value: hasDatabase ? 'YES' : 'Not found',
           inline: true,
         },
         {
@@ -41,6 +41,12 @@ export default class GuildCreate extends BaseEvent {
         },
       ])
       .setTimestamp();
+
+    if (hasDatabase)
+      embed.setDescription(
+        `\`\`\`json\n${JSON.stringify(await client.databaseManiger.get(guild.id), null, 4)}\n\`\`\``
+      );
+
     client.Logs.send(embed);
     client.databaseManiger.new(guild.id);
   }
