@@ -17,6 +17,7 @@ export default class verifyClient extends Client {
   public validators = new ValidationModeManger();
   public hostApi?: Host;
   public Logs = new WebhookClient(LOGS.ID, LOGS.TOKEN);
+  public langs = this.languages.all;
   public constructor(options: ClientOptions = {}) {
     super(options);
   }
@@ -31,7 +32,7 @@ export default class verifyClient extends Client {
 
   isOwner(user: User | null): boolean {
     user = this.users.resolve(user ?? '');
-    if (!user) return false;
+    if (!user) throw new RangeError('Unable to resolve user spesefied.');
     return OWNERS.includes(user.id);
   }
 

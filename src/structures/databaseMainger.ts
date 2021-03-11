@@ -68,7 +68,7 @@ export interface guildConfigs {
    * The language set to for the server
    * NOTE: not used but set for later on
    */
-  Language: 'en-us' | null;
+  Language: 'en-us' | 'es-ES' | null;
 }
 
 export default class datbaseMainger {
