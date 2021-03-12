@@ -2,6 +2,7 @@ import type { Message } from 'discord.js';
 
 export class ValidationModeManger {
   async equationMode(message: Message): Promise<boolean> {
+    let working = true;
     const emg = [':zero:', ':one:', ':two:', ':three:', ':four:', ':five:', ':six:', ':seven:', ':eight:', ':nine:'];
     const ops = ['+', '-', '*', '/'];
     const dCache = {
@@ -20,15 +21,24 @@ export class ValidationModeManger {
         time: 60000,
       })
       .then(c => c.first())
-      .catch(_e => message.channel.send('Time run out.'));
+      .catch(_e => {
+        working = false;
+        return message.channel.send('Time run out.');
+      });
 
     if (!col) return false;
     const res = parseInt(col.content);
 
+    if (!working) return false;
     if (isNaN(res)) return message.channel.send('Error: Not a number') && false;
     else if (typeof res === 'number' && res === anc) {
-      return true;
+      return message.channel.send('Correct, role(s) given.') && true;
+    } else {
+      return (
+        message.channel.send(
+          `Number is incorect, correct equation is \`${dCache.firstNumber} ${dCache.operation} ${dCache.secondNumber} = ${anc}\``
+        ) && false
+      );
     }
-    return true;
   }
 }

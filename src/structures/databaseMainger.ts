@@ -112,7 +112,8 @@ export default class datbaseMainger {
   }
 
   async has(id: string): Promise<boolean> {
-    return this._cache.has(id) === true ? this._cache.has(id) : !!(await this.get(id));
+    // return this._cache.has(id) === true ? this._cache.has(id) : !!(await this.get(id));
+    return this._cache.has(id) === true ?? !!(await this.get(id));
   }
 
   async push<T extends string>(key: keyof guildConfigs, added: T[], id: string): Promise<null | Set<T>> {
