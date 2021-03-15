@@ -35,7 +35,7 @@ export default class Info extends BaseCommand {
         {
           name: 'Invite',
           value:
-            '[Link](https://discord.com/oauth2/authorize?client_id=708451235195519017&scope=bot&permissions=268561472)',
+            '[Link](https://discord.com/oauth2/authorize?client_id=708451235195519017&scope=bot&permissions=268528712)',
           inline: true,
         },
         {
