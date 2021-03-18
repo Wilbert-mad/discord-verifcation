@@ -2,6 +2,7 @@ import type verifyClient from './VerifyClient';
 import * as sqlite from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { join } from 'path';
+import GuildBanManager from './GuildBanManager';
 
 export enum VarifactionModes {
   /**
@@ -74,6 +75,7 @@ export interface guildConfigs {
 export default class datbaseMainger {
   private _db: DATABASE | null = null;
   public ready = false;
+  public guildBansManager = new GuildBanManager(this);
   private _cache = new Map<string, guildConfigs | undefined>();
   constructor(public client: verifyClient) {
     this.client = client;

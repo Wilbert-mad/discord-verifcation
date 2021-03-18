@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS guildConfigs (
 );
 
 -- Down
--- Drop TABLE guildConfigs
+Drop TABLE guildConfigs

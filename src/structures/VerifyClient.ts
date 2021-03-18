@@ -22,6 +22,10 @@ export default class verifyClient extends Client {
     super(options);
   }
 
+  get guildBans() {
+    return this.databaseManiger.guildBansManager;
+  }
+
   async start(token: string, key: string) {
     await this.databaseManiger.startMain();
     this.hostApi = new Host(key, this.user?.id);
