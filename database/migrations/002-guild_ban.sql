@@ -1,0 +1,9 @@
+-- Up
+CREATE TABLE IF NOT EXISTS BanGuilds (
+  ID TEXT NOT NULL PRIMARY KEY,
+  RESON TEXT NOT NULL,
+  BanStatus BOOLEAN NOT NULL DEFAULT true
+);
+
+-- Down
+-- Drop TABLE BanGuils
