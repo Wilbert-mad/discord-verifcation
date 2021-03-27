@@ -17,6 +17,7 @@ export default class MessageEvent extends BaseEvent {
 
   async run(client: verifyClient, message: verifyMessage) {
     if (message.author.bot) return;
+    if (message.guild && (client.BansCache.get(message.guild.id) ?? {}).BanStatus === true) return;
 
     const data: dataCache = {};
     if (message.guild) {
