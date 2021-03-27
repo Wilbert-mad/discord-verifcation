@@ -6,6 +6,7 @@ import { Register } from '../Utils/Register';
 import { ValidationModeManger } from '../Utils/VarifactionModes';
 import type BaseCommand from './BaseCommand';
 import DatabaseManiger from './databaseMainger';
+import type { GuildBanData } from './GuildBanManager';
 import { LaguageMainger } from './languageMainger';
 
 export default class verifyClient extends Client {
@@ -18,6 +19,10 @@ export default class verifyClient extends Client {
   public hostApi?: Host;
   public Logs = new WebhookClient(LOGS.ID, LOGS.TOKEN);
   public langs = this.languages.all;
+  /**
+   * All loaded ban guilds could be only the initalized by client#ready
+   */
+  public BansCache = new Collection<string, GuildBanData>();
   public constructor(options: ClientOptions = {}) {
     super(options);
   }
